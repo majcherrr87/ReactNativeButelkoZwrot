@@ -67,16 +67,16 @@ app.post("/api/transactions", async (req, res) => {
   }
 });
 
-app.delete("/api/transactions/:user_id", async (req, res) => {
+app.delete("/api/transactions/:id", async (req, res) => {
   try {
-    const { user_id } = req.params;
+    const { id } = req.params;
 
-    if (isNaN(parseInt(user_id))) {
+    if (isNaN(parseInt(id))) {
       return res.status(400).json({ message: "Invalid transaction ID" });
     }
 
     const result =
-      await sql`DELETE FROM transactions WHERE user_id = ${user_id} RETURNING *`;
+      await sql`DELETE FROM transactions WHERE id = ${id} RETURNING *`;
     console.log(result);
 
     if (result.length === 0) {
