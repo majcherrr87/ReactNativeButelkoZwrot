@@ -1,9 +1,11 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { COLORS } from "../../constants/colors";
 import { useSignIn } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import React from "react";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, TextInput, View, Image } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Page() {
   const { signIn, errors, fetchStatus } = useSignIn();
@@ -19,7 +21,7 @@ export default function Page() {
       password,
     });
     if (error) {
-      console.error(JSON.stringify(error, null, 2));
+      // console.error(JSON.stringify(error, null, 2));
       return;
     }
 
@@ -144,97 +146,119 @@ export default function Page() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>
-        Sign in
-      </ThemedText>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      enableOnAndroid={true}
+      enableAutomaticScroll={true}
+      extraScrollHeight={100}
+    >
+      <ThemedView style={styles.container}>
+        <Image
+          source={require("../../assets/images/foto3.png")}
+          style={styles.illustration}
+        />
+        <ThemedText type="title" style={styles.title}>
+          Sign in
+        </ThemedText>
 
-      <ThemedText style={styles.label}>Email address</ThemedText>
-      <TextInput
-        style={styles.input}
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Enter email"
-        placeholderTextColor="#666666"
-        onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-        keyboardType="email-address"
-      />
-      {errors.fields.identifier && (
-        <ThemedText style={styles.error}>
-          {errors.fields.identifier.message}
-        </ThemedText>
-      )}
-      <ThemedText style={styles.label}>Password</ThemedText>
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="Enter password"
-        placeholderTextColor="#666666"
-        secureTextEntry={true}
-        onChangeText={(password) => setPassword(password)}
-      />
-      {errors.fields.password && (
-        <ThemedText style={styles.error}>
-          {errors.fields.password.message}
-        </ThemedText>
-      )}
-      <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          (!emailAddress || !password || fetchStatus === "fetching") &&
-            styles.buttonDisabled,
-          pressed && styles.buttonPressed,
-        ]}
-        onPress={handleSubmit}
-        disabled={!emailAddress || !password || fetchStatus === "fetching"}
-      >
-        <ThemedText style={styles.buttonText}>Continue</ThemedText>
-      </Pressable>
-      {/* For your debugging purposes. You can just console.log errors, but we put them in the UI for convenience */}
-      {errors && (
-        <ThemedText style={styles.debug}>
-          {JSON.stringify(errors, null, 2)}
-        </ThemedText>
-      )}
+        <ThemedText style={styles.label}>Email address</ThemedText>
+        <TextInput
+          style={styles.input}
+          autoCapitalize="none"
+          value={emailAddress}
+          placeholder="Enter email"
+          placeholderTextColor="#666666"
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          keyboardType="email-address"
+        />
+        {errors.fields.identifier && (
+          <ThemedText style={styles.error}>
+            {errors.fields.identifier.message}
+          </ThemedText>
+        )}
+        <ThemedText style={styles.label}>Password</ThemedText>
+        <TextInput
+          style={styles.input}
+          value={password}
+          placeholder="Enter password"
+          placeholderTextColor="#666666"
+          secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+        {errors.fields.password && (
+          <ThemedText style={styles.error}>
+            {errors.fields.password.message}
+          </ThemedText>
+        )}
+        <Pressable
+          style={({ pressed }) => [
+            styles.button,
+            (!emailAddress || !password || fetchStatus === "fetching") &&
+              styles.buttonDisabled,
+            pressed && styles.buttonPressed,
+          ]}
+          onPress={handleSubmit}
+          disabled={!emailAddress || !password || fetchStatus === "fetching"}
+        >
+          <ThemedText style={styles.buttonText}>Continue</ThemedText>
+        </Pressable>
+        {/* For your debugging purposes. You can just console.log errors, but we put them in the UI for convenience */}
 
-      <View style={styles.linkContainer}>
-        <ThemedText> Don t have an account? </ThemedText>
-        <Link href="/sign-up">
-          <ThemedText type="link">Sign up</ThemedText>
-        </Link>
-      </View>
-    </ThemedView>
+        <View style={styles.footerContainer}>
+          <ThemedText style={styles.footerText}>
+            Don`t have an account?
+          </ThemedText>
+          <Link href="/sign-up">
+            <ThemedText style={styles.linkText}>Sign up</ThemedText>
+          </Link>
+        </View>
+      </ThemedView>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.background,
     padding: 20,
-    gap: 12,
+    justifyContent: "center",
   },
   title: {
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: "bold",
+    color: COLORS.text,
+    marginVertical: 15,
+    textAlign: "center",
   },
   label: {
     fontWeight: "600",
     fontSize: 14,
+    color: COLORS.text,
   },
   input: {
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 12,
+    borderColor: COLORS.border,
     fontSize: 16,
-    backgroundColor: "#fff",
+    color: COLORS.text,
+  },
+  illustration: {
+    height: 400,
+    width: 400,
+    resizeMode: "contain",
   },
   button: {
-    backgroundColor: "#0a7ea4",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    padding: 16,
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 10,
+    marginBottom: 20,
   },
   buttonPressed: {
     opacity: 0.7,
@@ -243,7 +267,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    color: "#fff",
+    color: COLORS.white,
+    fontSize: 18,
     fontWeight: "600",
   },
   secondaryButton: {
@@ -257,11 +282,20 @@ const styles = StyleSheet.create({
     color: "#0a7ea4",
     fontWeight: "600",
   },
-  linkContainer: {
+  footerContainer: {
     flexDirection: "row",
-    gap: 4,
-    marginTop: 12,
+    justifyContent: "center",
     alignItems: "center",
+    gap: 8,
+  },
+  footerText: {
+    color: COLORS.text,
+    fontSize: 16,
+  },
+  linkText: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: "600",
   },
   error: {
     color: "#d32f2f",
