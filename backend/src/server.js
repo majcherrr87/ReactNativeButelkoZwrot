@@ -7,7 +7,7 @@ import transacrionsRoute from "./routes/transactionsRoute.js";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 
 //middleware
 app.use(ratelimiter);
@@ -22,5 +22,3 @@ initDB().then(() => {
     console.log("Server is running on port " + PORT);
   });
 });
-
-//52:45
