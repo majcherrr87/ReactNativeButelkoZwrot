@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useTransactions } from "@/hooks/useTransactions";
 import { Show, useUser, useClerk } from "@clerk/expo";
 import { Link } from "expo-router";
 import { Text, View, Pressable, StyleSheet } from "react-native";
@@ -5,6 +7,16 @@ import { Text, View, Pressable, StyleSheet } from "react-native";
 export default function Page() {
   const { user } = useUser();
   const { signOut } = useClerk();
+  const { transactions, summary, isLoading, loadData, deletedTransaction } =
+    useTransactions(user?.id);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  console.log("Transactions: ", transactions);
+  console.log("Summary: ", summary);
+  console.log("UserID ", user?.id);
 
   return (
     <View style={styles.container}>
