@@ -14,13 +14,12 @@ export default function Page() {
     loadData();
   }, [loadData]);
 
-  console.log("Transactions: ", transactions);
-  console.log("Summary: ", summary);
-  console.log("UserID ", user?.id);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome!</Text>
+      <Text>Income: {summary.income}</Text>
+      <Text>Balance: {summary.balance}</Text>
+      <Text>Expenses: {summary.expenses}</Text>
       <Show when="signed-out">
         <Link href="/(auth)/sign-in">
           <Text>Sign in</Text>

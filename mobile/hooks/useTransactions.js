@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { Alert } from "react-native";
 
-const API_URL = "http://localhost:5001/api";
+const API_URL = "https://backendzwrotkaucji.onrender.com/api";
 
 export const useTransactions = (userId) => {
   const [transactions, setTransactions] = useState([]);
