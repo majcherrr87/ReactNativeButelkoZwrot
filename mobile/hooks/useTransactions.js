@@ -47,16 +47,18 @@ export const useTransactions = (userId) => {
     }
   }, [fetchTransactions, fetchSummary, userId]);
 
-  const deletedTransaction = (id) => {
+  const deleteTransaction = async (id) => {
     try {
-      const response = fech(`${API_URL}/transactions/${id}`, {
+      const response = await fetch(`${API_URL}/transactions/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete transaction");
+
+      // Refresh data after deleted
       loadData();
       Alert.alert("Success", "Transaction deleted successfully");
     } catch (error) {
-      console.error("Error deleting transaction: ", error);
+      console.error("Error deleting transaction:", error);
       Alert.alert("Error", error.message);
     }
   };
@@ -65,6 +67,6 @@ export const useTransactions = (userId) => {
     summary,
     isLoading,
     loadData,
-    deletedTransaction,
+    deleteTransaction,
   };
 };
